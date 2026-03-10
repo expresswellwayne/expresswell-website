@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Express Well Resources</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 10px 2%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: nowrap;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-left: -18px;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap img {
+      height: 110px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    nav a {
+      font-size: 14px;
+      color: #1f2937;
+      font-weight: 600;
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      color: #0e4db3;
+    }
+
+    .lang-btn {
+      border: none;
+      background: #0e4db3;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      padding: 0 6%;
+      background:
+        linear-gradient(rgba(7, 24, 44, 0.55), rgba(7, 24, 44, 0.70)),
+        url('hero-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+
+    .hero-inner {
+      max-width: 820px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 22px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.28);
+      font-size: 13px;
+      color: rgba(255,255,255,0.95);
+    }
+
+    h1 {
+      font-size: 58px;
+      line-height: 1.08;
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 16px;
+      max-width: 760px;
+    }
+
+    .hero-buttons {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #0e4db3;
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.35);
+      color: white;
+    }
+
+    section {
+      padding: 82px 6%;
+    }
+
+    .section-white {
+      background: #ffffff;
+    }
+
+    .section-light {
+      background: #f5f7fa;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 40px;
+      margin-bottom: 18px;
+      color: #0f172a;
+    }
+
+    .section-text {
+      font-size: 17px;
+      color: #4b5563;
+      max-width: 920px;
+      margin-bottom: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+
+    .card h3 {
+      font-size: 25px;
+      margin-bottom: 12px;
+      color: #0f172a;
+    }
+
+    .card p {
+      color: #4b5563;
+    }
+
+    .commodity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .commodity-tile {
+      position: relative;
+      height: 390px;
+      border-radius: 18px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      min-height: 390px;
+    }
+
+    .commodity-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 32, 67, 0.90), rgba(8, 32, 67, 0.10));
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+
+    .commodity-content h3 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 10px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .commodity-content p {
+      color: rgba(255,255,255,0.92);
+      font-size: 15px;
+      max-width: 100%;
+      line-height: 1.45;
+    }
+
+    ul {
+      padding-left: 22px;
+      margin-top: 10px;
+      color: #4b5563;
+    }
+
+    .contact-box {
+      max-width: 620px;
+    }
+
+    .email-link {
+      color: #0e4db3;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      padding: 28px 6%;
+      text-align: center;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 14px;
+      background: #ffffff;
+    }
+
+    @media (max-width: 1200px) {
+      .commodity-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-container {
+        flex-wrap: wrap;
+        padding: 10px 4%;
+      }
+
+      .logo-wrap {
+        margin-left: 0;
+      }
+
+      .logo-wrap img {
+        height: 88px;
+      }
+
+      nav {
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 40px;
+      }
+
+      h2 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .commodity-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .commodity-tile {
+        height: 320px;
+        min-height: 320px;
+      }
+
+      .commodity-content h3 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo-wrap">
+        <img src="logo.png" alt="EWR Logo" />
+      </div>
+
+      <nav>
+        <a href="#home" data-en="Home" data-zh="首页">Home</a>
+        <a href="#philosophy" data-en="Our Philosophy" data-zh="公司理念">Our Philosophy</a>
+        <a href="#products" data-en="Products" data-zh="产品">Products</a>
+        <a href="#network" data-en="Global Supply Network" data-zh="全球供应网络">Global Supply Network</a>
+        <a href="#about" data-en="About Us" data-zh="关于我们">About Us</a>
+        <a href="#contact" data-en="Contact" data-zh="联系方式">Contact</a>
+        <button class="lang-btn" onclick="toggleLanguage()">中文</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="badge" data-en="Singapore Commodity Trading Company" data-zh="新加坡大宗商品贸易公司">
+        Singapore Commodity Trading Company
+      </div>
+
+      <h1
+        data-en="Global Commodity Trading & Resource Supply"
+        data-zh="全球大宗商品贸易与资源供应"
+      >
+        Global Commodity Trading & Resource Supply
+      </h1>
+
+      <p
+        data-en="Express Well Resources Pte Ltd is a Singapore-based commodity trading company specializing in the international supply of energy resources and mineral commodities."
+        data-zh="Express Well Resources Pte Ltd 总部位于新加坡，是一家专注于能源矿产和金属矿产贸易的国际资源供应商。"
+      >
+        Express Well Resources Pte Ltd is a Singapore-based commodity trading company specializing in the international supply of energy resources and mineral commodities.
+      </p>
+
+      <p
+        data-en="Since 2014, we have developed long-term relationships with mining partners, logistics providers, and industrial customers across global markets. Our focus is on building reliable procurement and supply networks that support sustainable and long-term business cooperation."
+        data-zh="自 2014年成立以来，公司与多家矿山企业、物流合作伙伴以及工业客户建立了稳定的合作关系，并逐步构建了可靠的资源采购与供应网络。公司致力于通过长期合作关系，为客户提供稳定和持续的资源供应。"
+      >
+        Since 2014, we have developed long-term relationships with mining partners, logistics providers, and industrial customers across global markets. Our focus is on building reliable procurement and supply networks that support sustainable and long-term business cooperation.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary" data-en="Contact Us" data-zh="联系我们">Contact Us</a>
+        <a href="#products" class="btn-secondary" data-en="View Products" data-zh="查看产品">View Products</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="philosophy" class="section-white">
+    <div class="container">
+      <h2 data-en="Our Philosophy" data-zh="公司理念">Our Philosophy</h2>
+      <p
+        class="section-text"
+        data-en="Our business is built on three core principles:"
+        data-zh="公司的经营理念建立在三个核心原则之上："
+      >
+        Our business is built on three core principles:
+      </p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3 data-en="Integrity" data-zh="诚信经营">Integrity</h3>
+          <p
+            data-en="We conduct business with transparency and professionalism in every transaction."
+            data-zh="在每一项业务中坚持专业与透明。"
+          >
+            We conduct business with transparency and professionalism in every transaction.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 data-en="Long-term Partnerships" data-zh="长期合作">Long-term Partnerships</h3>
+          <p
+            data-en="We believe in building enduring relationships with both suppliers and customers."
+            data-zh="重视与供应商和客户建立稳定持久的合作关系。"
+          >
+            We believe in building enduring relationships with both suppliers and customers.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3 data-en="Reliable Supply Networks" data-zh="稳定供应">Reliable Supply Networks</h3>
+          <p
+            data-en="Through established sourcing channels and logistics coordination, we ensure consistent supply solutions."
+            data-zh="通过成熟的资源渠道与物流体系确保持续供应。"
+          >
+            Through established sourcing channels and logistics coordination, we ensure consistent supply solutions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-light" id="products">
+    <div class="container">
+      <h2 data-en="Core Commodities" data-zh="主要产品">Core Commodities</h2>
+
+      <p
+        class="section-text"
+        data-en="Express Well Resources supplies a range of bulk resources including:"
+        data-zh="公司主要经营以下资源产品："
+      >
+        Express Well Resources supplies a range of bulk resources including:
+      </p>
+
+      <ul>
+        <li data-en="Thermal Coal" data-zh="动力煤">Thermal Coal</li>
+        <li data-en="Industrial Salt" data-zh="工业盐">Industrial Salt</li>
+        <li data-en="Bauxite" data-zh="铝土矿">Bauxite</li>
+        <li data-en="Copper Ore & Concentrate" data-zh="铜矿石及铜精矿">Copper Ore & Concentrate</li>
+        <li data-en="Gold Ore" data-zh="金矿石">Gold Ore</li>
+        <li data-en="Lead & Zinc Ore" data-zh="铅锌矿">Lead & Zinc Ore</li>
+      </ul>
+
+      <p
+        class="section-text"
+        data-en="These commodities are sourced through established mining partnerships and delivered through reliable global logistics networks."
+        data-zh="这些资源通过稳定的矿山合作伙伴供应，并通过成熟的物流网络运输至全球客户。"
+      >
+        These commodities are sourced through established mining partnerships and delivered through reliable global logistics networks.
+      </p>
+
+      <div class="commodity-grid">
+        <div class="commodity-tile" style="background-image:url('coal.jpg');">
+          <div class="commodity-overlay">
+            <div class="commodity-content">
+              <h3 data-en="Coal" data-zh="煤炭">Coal</h3>
+              <p
+                data-en="Thermal coal supplied for power generation and industrial use."
+                data-zh="用于发电及工业用途的动力煤供应。"
+              >
+                Thermal coal supplied for power generation and industrial use.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="commodity-tile" style="background-image:url('bauxite.jpg');">
+          <div class="commodity-overlay">
+            <div class="commodity-content">
+              <h3 data-en="Bauxite" data-zh="铝土矿">Bauxite</h3>
+              <p
+                data-en="Bauxite sourced from reliable mining regions for alumina refining and aluminum production."
+                data-zh="来自可靠矿区的铝土矿，适用于氧化铝精炼及铝生产。"
+              >
+                Bauxite sourced from reliable mining regions for alumina refining and aluminum production.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="commodity-tile" style="background-image:url('copper.jpg');">
+          <div class="commodity-overlay">
+            <div class="commodity-content">
+              <h3 data-en="Copper" data-zh="铜矿">Copper</h3>
+              <p
+                data-en="Copper ore and concentrate supplied through established mining and logistics networks."
+                data-zh="通过成熟矿山合作及物流网络供应铜矿石及铜精矿。"
+              >
+                Copper ore and concentrate supplied through established mining and logistics networks.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="commodity-tile" style="background-image:url('salt.jpg');">
+          <div class="commodity-overlay">
+            <div class="commodity-content">
+              <h3 data-en="Industrial Salt" data-zh="工业盐">Industrial Salt</h3>
+              <p
+                data-en="Industrial salt supply for chemical production, water treatment, and industrial applications."
+                data-zh="工业盐可用于化工生产、水处理及多种工业用途。"
+              >
+                Industrial salt supply for chemical production, water treatment, and industrial applications.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 40px;">
+        <div class="card">
+          <h3 data-en="Thermal Coal" data-zh="动力煤">Thermal Coal</h3>
+          <p
+            data-en="Thermal coal remains a major energy resource used in power generation and industrial applications. Express Well Resources supplies thermal coal sourced from reliable mining regions with consistent quality and specifications."
+            data-zh="动力煤仍然是发电及工业应用的重要能源资源。Express Well Resources 供应来自可靠矿区、质量和规格稳定的动力煤。"
+          >
+            Thermal coal remains a major energy resource used in power generation and industrial applications. Express Well Resources supplies thermal coal sourced from reliable mining regions with consistent quality and specifications.
+          </p>
+          <ul>
+            <li data-en="Power generation" data-zh="发电">Power generation</li>
+            <li data-en="Industrial boilers" data-zh="工业锅炉">Industrial boilers</li>
+            <li data-en="Cement production" data-zh="水泥生产">Cement production</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 data-en="Industrial Salt" data-zh="工业盐">Industrial Salt</h3>
+          <p
+            data-en="Industrial salt is widely used in chemical production, water treatment, and industrial processes. Our supply network supports stable and reliable supply for multiple industrial applications."
+            data-zh="工业盐广泛应用于化工生产、水处理及多种工业流程。我们的供应网络可支持多种工业用途的稳定供应。"
+          >
+            Industrial salt is widely used in chemical production, water treatment, and industrial processes. Our supply network supports stable and reliable supply for multiple industrial applications.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="network" class="section-white">
+    <div class="container">
+      <h2 data-en="Global Supply Network" data-zh="全球供应网络">Global Supply Network</h2>
+      <p
+        class="section-text"
+        data-en="Our sourcing network spans multiple mining regions and emerging resource markets. Working closely with producers, shipping companies, and industrial clients, we facilitate stable supply chains that support long-term cooperation."
+        data-zh="公司资源来源覆盖多个矿产资源地区。通过与矿山企业、航运公司以及工业客户的合作，我们建立了稳定可靠的供应链体系。"
+      >
+        Our sourcing network spans multiple mining regions and emerging resource markets. Working closely with producers, shipping companies, and industrial clients, we facilitate stable supply chains that support long-term cooperation.
+      </p>
+    </div>
+  </section>
+
+  <section id="about" class="section-light">
+    <div class="container">
+      <h2 data-en="About Us" data-zh="关于我们">About Us</h2>
+
+      <p
+        class="section-text"
+        data-en="Express Well Resources Pte Ltd is headquartered in Singapore, one of the world's leading hubs for international commodity trading."
+        data-zh="Express Well Resources Pte Ltd 总部位于新加坡，新加坡是全球领先的国际大宗商品贸易中心之一。"
+      >
+        Express Well Resources Pte Ltd is headquartered in Singapore, one of the world's leading hubs for international commodity trading.
+      </p>
+
+      <p
+        class="section-text"
+        data-en="The company focuses on sourcing, marketing, and distributing bulk mineral and energy resources through established partnerships with mining producers and industrial customers."
+        data-zh="公司专注于通过与矿山生产商及工业客户建立的合作关系，开展大宗矿产及能源资源的采购、销售与分销业务。"
+      >
+        The company focuses on sourcing, marketing, and distributing bulk mineral and energy resources through established partnerships with mining producers and industrial customers.
+      </p>
+
+      <p
+        class="section-text"
+        data-en="Over the years, we have built a diversified sourcing network and reliable logistics framework that enables us to serve clients across Asia and global markets."
+        data-zh="多年来，我们已建立多元化的资源采购网络和可靠的物流体系，为亚洲及全球市场客户提供服务。"
+      >
+        Over the years, we have built a diversified sourcing network and reliable logistics framework that enables us to serve clients across Asia and global markets.
+      </p>
+
+      <ul>
+        <li data-en="Integrity in business practices" data-zh="诚信经营">Integrity in business practices</li>
+        <li data-en="Long-term cooperation with partners" data-zh="长期合作">Long-term cooperation with partners</li>
+        <li data-en="Stable procurement channels" data-zh="稳定采购渠道">Stable procurement channels</li>
+        <li data-en="Reliable supply chain management" data-zh="可靠供应链管理">Reliable supply chain management</li>
+      </ul>
+
+      <p
+        class="section-text"
+        style="margin-top:14px;"
+        data-en="We value discretion, reliability, and long-term partnerships."
+        data-zh="我们重视低调务实、稳定可靠以及长期合作关系。"
+      >
+        We value discretion, reliability, and long-term partnerships.
+      </p>
+    </div>
+  </section>
+
+  <section id="contact" class="section-white">
+    <div class="container">
+      <h2 data-en="Contact" data-zh="联系方式">Contact</h2>
+
+      <div class="card contact-box">
+        <p style="font-weight:700; margin-bottom:10px;">Express Well Resources Pte Ltd</p>
+        <p style="color:#4b5563; margin-bottom:10px;" data-en="Singapore" data-zh="新加坡">Singapore</p>
+        <p style="color:#4b5563; margin-bottom:10px;" data-en="Business Enquiries" data-zh="商务联系">Business Enquiries</p>
+        <a class="email-link" href="mailto:ewrcoalteam@expresswell.com.sg">ewrcoalteam@expresswell.com.sg</a>
+        <p style="color:#4b5563; margin-top:8px;">Tel: +65 6557 0655</p>
+      </div>
+    </div>
+  </section>
+
+  <footer data-en="© Express Well Resources Pte Ltd. All rights reserved." data-zh="© Express Well Resources Pte Ltd 版权所有。">
+    © Express Well Resources Pte Ltd. All rights reserved.
+  </footer>
+
+  <script>
+    let currentLang = "en";
+
+    function toggleLanguage() {
+      currentLang = currentLang === "en" ? "zh" : "en";
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll("[data-en]").forEach((el) => {
+        el.textContent = el.getAttribute(`data-${currentLang}`);
+      });
+
+      document.querySelector(".lang-btn").textContent = currentLang === "en" ? "中文" : "EN";
+    }
+  </script>
+</body>
+</html>
